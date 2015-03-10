@@ -22,3 +22,6 @@ get '/callback' do
   # extract the token and granted scopes
   access_token = JSON.parse(result)['access_token']
 end
+# check if we were granted user:email scope
+scopes = JSON.parse(result)['scope'].split(',')
+has_user_email_scope = scopes.include? 'user:email'
