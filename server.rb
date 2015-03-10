@@ -25,3 +25,25 @@ end
 # check if we were granted user:email scope
 scopes = JSON.parse(result)['scope'].split(',')
 has_user_email_scope = scopes.include? 'user:email'
+# fetch user information
+auth_result = JSON.parse(RestClient.get('https://api.github.com/user',
+                                        {:params => {:access_token => access_token}}))
+
+# if the user authorized it, fetch private emails
+if has_user_email_scope
+  auth_result['private_emails'] =
+    JSON.parse(RestClient.get('https://api.github.com/user/emails',
+                              {:params => {:access_token => access_token}}))
+
+erb :basic, :locals => auth_result
+# fetch user information
+auth_result = JSON.parse(RestClient.get('https://api.github.com/user',
+                                        {:params => {:access_token => access_token}}))
+
+# if the user authorized it, fetch private emails
+if has_user_email_scope
+  auth_result['private_emails'] =
+    JSON.parse(RestClient.get('https://api.github.com/user/emails',
+                              {:params => {:access_token => access_token}}))
+
+erb :basic, :locals => auth_result
